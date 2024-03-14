@@ -1,7 +1,7 @@
 import Todo from "./components/Todo.jsx";
 import { useEffect, useState } from "react";
 import AddTodoForm from "./components/AddTodoForm.jsx";
-import { GridColumn } from "semantic-ui-react";
+
 
 import "./App.css";
 
@@ -9,6 +9,7 @@ function App() {
   const [data, setData] = useState([]);
 
   async function handleTodoFormSubmit(bodyData) {
+    try{
     const response = await fetch("http://localhost:4000/todos", {
       method: "POST",
 
@@ -22,25 +23,37 @@ function App() {
     const parsedResponse = await response.json();
     setData((s) => [...s, ...parsedResponse]);
   }
+  catch(message){
+    alert("Start the server");
+  }
+  }
 
   async function handleTodoComplete(isCompleted, id) {
-    await fetch(`http://localhost:4000/todo/done/${id}`, {
-      method: "PUT",
+    try {
+      await fetch(`http://localhost:4000/todo/done/${id}`, {
+        method: "PUT",
 
-      headers: {
-        "Content-Type": "application/json",
-      },
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-      body: JSON.stringify({ completed: isCompleted }),
-    });
+        body: JSON.stringify({ completed: isCompleted }),
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async function handleTodoDelete(id) {
-    const response=await fetch(`http://localhost:4000/todo/delete/${id}`, {
-      method: "DELETE",
-    });
-    const parsedData=await response.json();
-    setData((s)=>parsedData);
+    try {
+      const response = await fetch(`http://localhost:4000/todo/delete/${id}`, {
+        method: "DELETE",
+      });
+      const parsedData = await response.json();
+      setData((s) => parsedData);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   useEffect(function () {
