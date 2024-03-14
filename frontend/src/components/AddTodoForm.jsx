@@ -1,31 +1,38 @@
 import { useState } from "react";
+import { Button, FormGroup, Form, FormInput } from "semantic-ui-react";
 
-function AddTodoForm({ handleSubmit }) {
+function AddTodoForm({ onSubmit }) {
   const [todo, setTodo] = useState("");
-  const [desc, setDesc] = useState("");
+
   return (
-    <div>
-      <input
-        type="text"
-        value={todo}
-        onChange={(e) => setTodo(e.target.value)}
-        name="todo"
-      />
-      <input type="text"
-        value={desc}
-        onChange={(e) => setDesc(e.target.value)}
-        name="desc" />
-      <button
-        onClick={() => {
-            // console.log({ todo: todo, desc: desc });
-          handleSubmit({ todo: todo, desc: desc });
-          setTodo("");
-          setDesc("");
-        }}
-      >
-        Submit
-      </button>
-    </div>
+    <>
+      <Form className="todoForm">
+        <FormGroup>
+          <FormInput
+            placeholder="Enter your todo"
+            type="text"
+            value={todo}
+            onChange={(e) => setTodo(e.target.value)}
+            name="todo"
+          />
+
+          <Button
+            positive
+            onClick={() => {
+              // console.log({ todo: todo, desc: desc });
+              if (todo) {
+                onSubmit({ todo: todo });
+                setTodo("");
+              } else {
+                alert("Please enter some todo");
+              }
+            }}
+          >
+            Add
+          </Button>
+        </FormGroup>
+      </Form>
+    </>
   );
 }
 
